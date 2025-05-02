@@ -75,3 +75,26 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => {
   console.error('❌ MongoDB connection error:', err);
 });
+
+
+app.get('/shorten/:shortCode', async (req, res) => {
+  const { shortCode } = req.params;
+
+  try {
+    const urlRecord = await Url.findOne({ shortCode });
+
+    if (!urlRecord) {
+      return res.status(404).json({ message: 'Short URL not found' });
+    }
+
+    res.status(200).json({
+      id: urlRecord._id,
+      url: urlRecord.url,
+      shortCode: urlRecord.shortCode,
+      createdAt: urlRecord.createdAt,
+      updatedAt: urlRecord.updatedAt,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error });
+  }
+});
