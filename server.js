@@ -98,3 +98,20 @@ app.get('/shorten/:shortCode', async (req, res) => {
     res.status(500).json({ message: 'Server Error', error });
   }
 });
+
+
+app.delete('/shorten/:shortCode', async (req, res) => {
+  const { shortCode } = req.params;
+
+  try {
+    const deleted = await Url.findOneAndDelete({ shortCode });
+
+    if (!deleted) {
+      return res.status(404).json({ message: 'Short URL not found' });
+    }
+
+    return res.status(204).send(); // No Content
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error });
+  }
+});
