@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const shortid = require('shortid');
-const Url = require('./models/url');
+const Url = require('./models/Url');
 const cors = require('cors');
 
 dotenv.config(); 
