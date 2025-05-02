@@ -110,7 +110,31 @@ app.delete('/shorten/:shortCode', async (req, res) => {
       return res.status(404).json({ message: 'Short URL not found' });
     }
 
-    return res.status(204).send(); // No Content
+    return res.status(204).send(); 
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error });
+  }
+});
+
+
+app.get('/shorten/stats/:shortCode', async (req, res) => {
+  const { shortCode } = req.params;
+
+  try {
+    const urlRecord = await Url.findOne({ shortCode });
+
+    if (!urlRecord) {
+      return res.status(404).json({ message: 'Short URL not found' });
+    }
+
+    res.status(200).json({
+      id: urlRecord._id,
+      url: urlRecord.url,
+      shortCode: urlRecord.shortCode,
+      createdAt: urlRecord.createdAt,
+      updatedAt: urlRecord.updatedAt,
+      accessCount: urlRecord.accessCount, 
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error });
   }
