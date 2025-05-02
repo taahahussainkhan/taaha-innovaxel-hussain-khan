@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import UrlForm from './components/UrlForm';
 import RetrieveForm from './components/RetrieveForm';
+import DeleteForm from './components/DeleteUrl';
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
               <Route path="/" element={<UrlForm />} />
               <Route path="/retrieve" element={<RetrieveForm />} />
               <Route path="/update" element={<div>Update Page</div>} />
-              <Route path="/delete" element={<div>Delete Page</div>} />
+              <Route path="/delete" element={<DeleteForm />} />
               <Route path="/stats" element={<div>Stats Page</div>} />
             </Routes>
           </div>
