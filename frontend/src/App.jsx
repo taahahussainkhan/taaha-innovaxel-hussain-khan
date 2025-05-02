@@ -11,14 +11,15 @@ function App() {
     <Router>
       <div className="bg-gray-100 min-h-screen">
         <Navbar />
-
-        <Routes>
-          <Route path="/" element={<UrlForm />} />
-          <Route path="/retrieve" element={<RetrieveForm />} />
-          <Route path="/update" element={<UpdateUrl />} />
-          <Route path="/delete" element={<DeleteForm />} />
-          <Route path="/stats" element={<StatsForm />} />
-        </Routes>
+        <div className="pt-20 px-4">
+          <Routes>
+            <Route path="/" element={<UrlForm />} />
+            <Route path="/retrieve" element={<RetrieveForm />} />
+            <Route path="/update" element={<UpdateUrl />} />
+            <Route path="/delete" element={<DeleteForm />} />
+            <Route path="/stats" element={<StatsForm />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );

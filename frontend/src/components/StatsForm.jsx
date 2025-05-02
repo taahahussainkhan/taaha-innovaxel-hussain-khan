@@ -24,7 +24,7 @@ const StatsForm = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 mt-10 bg-white shadow-md rounded-lg border border-gray-100">
+    <div className="max-w-3xl mx-auto p-6 mt-10 bg-white shadow-md rounded-lg border border-gray-100">
       <h2 className="text-2xl font-medium mb-6 text-gray-800">URL Statistics</h2>
       <form onSubmit={handleGetStats} className="space-y-4">
         <div>
