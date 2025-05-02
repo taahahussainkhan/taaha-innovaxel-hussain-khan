@@ -13,3 +13,13 @@ export const getOriginalUrl = async (shortCode) => {
 export const deleteShortUrl = async (shortCode) => {
   return axios.delete(`http://localhost:3000/shorten/${shortCode}`);
 };
+
+
+export const getStats = async (shortCode) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/shorten/stats/${shortCode}`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

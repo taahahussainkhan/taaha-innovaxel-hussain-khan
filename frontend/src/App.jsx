@@ -3,6 +3,8 @@ import Navbar from './components/Navbar';
 import UrlForm from './components/UrlForm';
 import RetrieveForm from './components/RetrieveForm';
 import DeleteForm from './components/DeleteUrl';
+import StatsForm from './components/StatsForm';
+
 
 function App() {
   return (
@@ -16,7 +18,7 @@ function App() {
               <Route path="/retrieve" element={<RetrieveForm />} />
               <Route path="/update" element={<div>Update Page</div>} />
               <Route path="/delete" element={<DeleteForm />} />
-              <Route path="/stats" element={<div>Stats Page</div>} />
+              <Route path="/stats" element={<StatsForm />} />
             </Routes>
           </div>
         </div>

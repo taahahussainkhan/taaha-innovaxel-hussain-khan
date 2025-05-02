@@ -17,7 +17,7 @@ const UrlForm = () => {
     try {
       const response = await shortenUrl(originalUrl);
       const { shortCode } = response.data;
-      setShortUrl(`http://localhost:3000/shorten/${shortCode}`);
+      setShortUrl(`http://localhost:3000/${shortCode}`);
     } catch (err) {
       const msg = err.response?.data?.message || 'Server error';
       setError(msg);
