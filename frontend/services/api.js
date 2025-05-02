@@ -23,3 +23,8 @@ export const getStats = async (shortCode) => {
     throw error;
   }
 };
+
+
+export const updateShortUrl = (shortCode, newUrl) => {
+  return axios.put(`${BASE_URL}/shorten/${shortCode}`, { url: newUrl });
+};

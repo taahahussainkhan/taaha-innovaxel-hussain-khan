@@ -4,6 +4,7 @@ import UrlForm from './components/UrlForm';
 import RetrieveForm from './components/RetrieveForm';
 import DeleteForm from './components/DeleteUrl';
 import StatsForm from './components/StatsForm';
+import UpdateUrl from './components/UpdateShortUrl';
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
             <Routes>
               <Route path="/" element={<UrlForm />} />
               <Route path="/retrieve" element={<RetrieveForm />} />
-              <Route path="/update" element={<div>Update Page</div>} />
+              <Route path="/update" element={<UpdateUrl/>} />
               <Route path="/delete" element={<DeleteForm />} />
               <Route path="/stats" element={<StatsForm />} />
             </Routes>
