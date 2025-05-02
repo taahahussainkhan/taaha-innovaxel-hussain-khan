@@ -1,21 +1,66 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const shortid = require('shortid');
+const Url = require('./models/url');
 const cors = require('cors');
-const urlRoutes = require('./routes/urlRoutes');
 
 dotenv.config(); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
 app.use(cors());
 app.use(express.json()); 
 
 
-app.use('/shorten', urlRoutes);
+app.post('/shorten', async (req, res) => {
+  const { url } = req.body;
+  
+  if (!url) {
+    return res.status(400).json({ message: 'URL is required' });
+  }
 
+  const shortCode = shortid.generate();
+
+  try {
+    const newUrl = new Url({
+      url,
+      shortCode,
+    });
+
+    await newUrl.save();
+    res.status(201).json(newUrl);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error });
+  }
+});
+
+
+app.get('/:shortCode', async (req, res) => {
+  const { shortCode } = req.params;
+
+  try {
+    const urlRecord = await Url.findOne({ shortCode });
+
+    if (!urlRecord) {
+      return res.status(404).json({ message: 'Short URL not found' });
+    }
+
+    
+    urlRecord.accessCount += 1;
+    await urlRecord.save();
+
+    
+    res.redirect(urlRecord.url);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error });
+  }
+});
+
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -30,6 +75,3 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => {
   console.error('❌ MongoDB connection error:', err);
 });
-
-
-
