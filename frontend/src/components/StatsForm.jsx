@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getStats } from "../../services/api";
 
 const StatsForm = () => {
-  const [shortCode, setShortCode] = useState("");
-  const [stats, setStats] = useState(null);
+  const [shortCode, setShortCode] = useState(() => localStorage.getItem("shortCode") || "");
+  const [stats, setStats] = useState(() => {
+    const stored = localStorage.getItem("stats");
+    return stored ? JSON.parse(stored) : null;
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -16,11 +19,21 @@ const StatsForm = () => {
     try {
       const response = await getStats(shortCode);
       setStats(response.data);
+      localStorage.setItem("shortCode", shortCode);
+      localStorage.setItem("stats", JSON.stringify(response.data));
     } catch (err) {
       setError(err.response?.data?.message || "Failed to get stats.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleClear = () => {
+    localStorage.removeItem("shortCode");
+    localStorage.removeItem("stats");
+    setShortCode("");
+    setStats(null);
+    setError("");
   };
 
   return (
@@ -34,14 +47,11 @@ const StatsForm = () => {
             value={shortCode}
             onChange={(e) => setShortCode(e.target.value)}
             required
-            className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg"
           />
         </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors duration-200 flex justify-center items-center"
-        >
+        <button type="submit" disabled={loading}
+                className="w-full bg-blue-500 text-white py-3 rounded-lg">
           {loading ? (
             <>
               <span className="mr-2 inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -54,41 +64,14 @@ const StatsForm = () => {
       </form>
 
       {stats && (
-        <div className="mt-6 p-4 bg-gray-50 border border-gray-100 rounded-lg">
-          <h3 className="text-lg font-medium text-gray-700 mb-3">Short URL Details</h3>
-          <div className="space-y-2 text-sm">
-            <div className="flex flex-col">
-              <span className="text-gray-500">Short Code:</span>
-              <span className="text-gray-800 font-medium">{stats.shortCode}</span>
-            </div>
-            
-            <div className="flex flex-col">
-              <span className="text-gray-500">Original URL:</span>
-              <a 
-                href={stats.url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:text-blue-600 truncate break-all"
-              >
-                {stats.url}
-              </a>
-            </div>
-            
-            <div className="flex flex-col">
-              <span className="text-gray-500">Access Count:</span>
-              <span className="text-gray-800 font-medium">{stats.accessCount}</span>
-            </div>
-            
-            <div className="flex flex-col">
-              <span className="text-gray-500">Created:</span>
-              <span className="text-gray-800">{new Date(stats.createdAt).toLocaleString()}</span>
-            </div>
-            
-            <div className="flex flex-col">
-              <span className="text-gray-500">Last Updated:</span>
-              <span className="text-gray-800">{new Date(stats.updatedAt).toLocaleString()}</span>
-            </div>
-          </div>
+        <div className="mt-6 p-4 bg-gray-50 border border-gray-100 rounded-lg space-y-2">
+          <h3 className="text-lg font-medium text-gray-700">Short URL Details</h3>
+          <p><strong>Short Code:</strong> {stats.shortCode}</p>
+          <p><strong>Original URL:</strong> <a href={stats.url} target="_blank" rel="noreferrer"
+                                               className="text-blue-500">{stats.url}</a></p>
+          <p><strong>Access Count:</strong> {stats.accessCount}</p>
+          <p><strong>Created:</strong> {new Date(stats.createdAt).toLocaleString()}</p>
+          <p><strong>Last Updated:</strong> {new Date(stats.updatedAt).toLocaleString()}</p>
         </div>
       )}
 
@@ -97,6 +80,11 @@ const StatsForm = () => {
           <p className="text-red-600 text-sm">{error}</p>
         </div>
       )}
+
+      <button onClick={handleClear}
+              className="mt-4 w-full py-2 text-sm bg-red-100 hover:bg-red-200 text-red-700 rounded">
+        Clear
+      </button>
     </div>
   );
 };

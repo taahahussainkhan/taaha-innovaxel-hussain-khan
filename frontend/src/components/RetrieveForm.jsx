@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { getOriginalUrl } from '../../services/api';
+import useCopyToClipboard from '../hooks/useCopyToClipboard';
 
 const RetrieveForm = () => {
   const [shortCode, setShortCode] = useState('');
   const [originalUrl, setOriginalUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [copied, copyToClipboard] = useCopyToClipboard();
 
   const handleRetrieve = async (e) => {
     e.preventDefault();
@@ -24,14 +26,7 @@ const RetrieveForm = () => {
   };
 
   const handleCopy = async () => {
-    if (!originalUrl) return;
-    
-    try {
-      await navigator.clipboard.writeText(originalUrl);
-  
-    } catch (err) {
-      console.error('Failed to copy:', err);
-    }
+    if (originalUrl) await copyToClipboard(originalUrl);
   };
 
   return (
@@ -80,7 +75,7 @@ const RetrieveForm = () => {
               onClick={handleCopy}
               className="self-start px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors"
             >
-              Copy
+              {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
         </div>

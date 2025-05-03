@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { shortenUrl } from '../../services/api';
 import ShortUrlDisplay from '../components/ShortUrlDisplay';
 

@@ -1,7 +1,10 @@
 function isValidUrl(url) {
-    const regex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(:\d+)?(\/[\w-]*)*(\?.*)?(#.*)?$/;
-    return regex.test(url);
+  try {
+    new URL(url);
+    return true;
+  } catch (err) {
+    return false;
   }
-  
-  module.exports = isValidUrl;
-  
+}
+
+module.exports = isValidUrl;
